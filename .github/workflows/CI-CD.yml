@@ -62,6 +62,16 @@ jobs:
           CM_KEY_ALIAS: ${{ secrets.SIGN_KEY }}
           CM_KEY_PASSWORD: ${{ secrets.SIGN_PASSWORD }}
         run: flutter build appbundle
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release.apk
+          path: $(pwd)/build/app/outputs/flutter-apk/app-release.apk
+      - name: Upload APP BUNDLE
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release.aab
+          path: $(pwd)build/app/outputs/bundle/release/app-release.aab
 
   archive:
     needs: [ release-android ]
@@ -72,16 +82,22 @@ jobs:
       - name: Get App Version
         id: get_flutter_version
         uses: its404/get-flutter-version@v1.0.0
+      - name: Download APK
+        uses: actions/download-artifact@v2
+        with:
+          name: app-release.apk
+      - name: Download AAB
+        uses: actions/download-artifact@v2
+        with:
+          name: app-release.aab
       - name: Archive
         env:
           APP_NAME: ${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}.${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}
         run: |
           sudo apt-get update
           sudo apt-get install zip
-          mv $(pwd)/build/app/outputs/flutter-apk/app-release.apk $(pwd)/build/app/outputs/flutter-apk/${{env.APP_NAME}}.apk
-          mv $(pwd)build/app/outputs/bundle/release/app-release.aab $(pwd)build/app/outputs/bundle/release/${{env.APP_NAME}}.aab
-          ls $(pwd)/build/app/outputs/flutter-apk
-          ls $(pwd)build/app/outputs/bundle/release/
-          zip -r ${{env.APP_NAME}}.zip $(pwd)/build/app/outputs/flutter-apk/${{env.APP_NAME}}.apk $(pwd)build/app/outputs/bundle/release/${{env.APP_NAME}}.aab
-          ls $(pwd)
+          mv app-release.apk ${{env.APP_NAME}}.apk
+          mv app-release.aab ${{env.APP_NAME}}.aab
+          ls
+          zip -r ${{env.APP_NAME}}.zip *
           echo "ARCHIVE HERE"
