@@ -12,8 +12,7 @@ jobs:
         uses: actions/setup-java@v4.2.2
         with:
           distribution: 'temurin'
-          java-version: '21'
-          cache: 'gradle'
+          java-version: '17'
       - name: Clone repository
         uses: actions/checkout@v4
       - name: Set up Flutter
