@@ -40,10 +40,13 @@ jobs:
           CM_KEY_PASSWORD: ${{ secrets.SIGN_PASSWORD }}
         run: |
           echo $CM_ENCODED_CERT > keystore-b64.txt
-          base64 -d keystore-b64.txt > keystore.jks
-          pwd
-          ls -la
-          cat keystore.jks
+          base64 -d keystore-b64.txt > keystore.jks      
+          echo ${{env.CI}}
+          echo ${{env.CM_ENCODED_CERT}}
+          echo ${{env.CM_KEYSTORE_PASSWORD}}
+          echo ${{env.CM_KEY_ALIAS}}
+          echo ${{env.CM_KEYSTORE_PASSWORD}}
+          echo ${{env.CM_KEY_PASSWORD}}
       - run: flutter pub get
       - run: flutter test
       - run: flutter build apk --build-name "MyCustomAppName"
