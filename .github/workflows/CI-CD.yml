@@ -91,19 +91,16 @@ jobs:
         with:
           name: app-release.aab
       - name: Archive
-        env:
-          APP_NAME: ${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}.${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}
         run: |
           sudo apt-get update
           sudo apt-get install zip
+          echo "APP_NAME=${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}+${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}" >> $GITHUB_ENV
           mv app-release.apk ${{env.APP_NAME}}.apk
           mv app-release.aab ${{env.APP_NAME}}.aab
           ls
           zip -r ${{env.APP_NAME}}.zip ${{env.APP_NAME}}.apk ${{env.APP_NAME}}.aab
       - name: Upload
         uses: adityak74/google-drive-upload-git-action@main
-        env:
-          APP_NAME: ${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}.${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}
         with:
             credentials: ${{ secrets.G_DRIVE }}
             filename: ${{ env.APP_NAME }}.zip
