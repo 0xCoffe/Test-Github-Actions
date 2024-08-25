@@ -71,15 +71,16 @@ jobs:
         id: get_flutter_version
         uses: its404/get-flutter-version@v1.0.0
       - name: Archive
+        env:
+          APP_NAME: ${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}.${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}
         run: |
-          echo "APP_NAME=${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}.${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}"
           sudo apt-get update
           sudo apt-get install zip
-          mv $(pwd)/build/app/outputs/flutter-apk/app-release.apk $(pwd)/build/app/outputs/flutter-apk/${{APP_NAME}}.apk
-          mv $(pwd)build/app/outputs/bundle/release/app-release.aab $(pwd)build/app/outputs/bundle/release/${{APP_NAME}}.aab
+          mv $(pwd)/build/app/outputs/flutter-apk/app-release.apk $(pwd)/build/app/outputs/flutter-apk/${{env.APP_NAME}}.apk
+          mv $(pwd)build/app/outputs/bundle/release/app-release.aab $(pwd)build/app/outputs/bundle/release/${{env.APP_NAME}}.aab
           ls $(pwd)/build/app/outputs/flutter-apk
           ls $(pwd)build/app/outputs/bundle/release/
-          zip -r ${APP_NAME}.zip $(pwd)/build/app/outputs/flutter-apk/${{APP_NAME}}.apk $(pwd)build/app/outputs/bundle/release/${{APP_NAME}}.aab
+          zip -r ${{APP_NAME}}.zip $(pwd)/build/app/outputs/flutter-apk/${{env.APP_NAME}}.apk $(pwd)build/app/outputs/bundle/release/${{env.APP_NAME}}.aab
           ls $(pwd)
           echo "ARCHIVE HERE"
 #
