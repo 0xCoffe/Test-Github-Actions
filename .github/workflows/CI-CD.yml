@@ -66,12 +66,12 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app-release.apk
-          path: $(pwd)/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
       - name: Upload APP BUNDLE
         uses: actions/upload-artifact@v2
         with:
           name: app-release.aab
-          path: $(pwd)build/app/outputs/bundle/release/app-release.aab
+          path: build/app/outputs/bundle/release/app-release.aab
 
   archive:
     needs: [ release-android ]
@@ -86,7 +86,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: app-release.apk
-      - name: Download AAB
+      - name: Download APP BUNDLE
         uses: actions/download-artifact@v2
         with:
           name: app-release.aab
