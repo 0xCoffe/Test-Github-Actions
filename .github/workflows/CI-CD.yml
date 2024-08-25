@@ -99,5 +99,6 @@ jobs:
           mv app-release.apk ${{env.APP_NAME}}.apk
           mv app-release.aab ${{env.APP_NAME}}.aab
           ls
-          zip -r ${{env.APP_NAME}}.zip *
-          echo "ARCHIVE HERE"
+          zip -r ${{env.APP_NAME}}.zip ${{env.APP_NAME}}.apk ${{env.APP_NAME}}.aab
+      - name: Upload
+        run: echo "UPLOAD"
