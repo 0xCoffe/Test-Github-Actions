@@ -90,11 +90,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: app-release.aab
+      - name: Prepare ARCHIVE NAME
+        run: echo "APP_NAME=${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}+${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}" >> $GITHUB_ENV
       - name: Archive
         run: |
           sudo apt-get update
-          sudo apt-get install zip
-          echo "APP_NAME=${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}+${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}" >> $GITHUB_ENV
+          sudo apt-get install zip         
           mv -v app-release.apk ${{env.APP_NAME}}.apk
           mv -v app-release.aab ${{env.APP_NAME}}.aab
           ls -la
