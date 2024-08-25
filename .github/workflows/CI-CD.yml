@@ -25,7 +25,7 @@ jobs:
       - run: flutter test
 
   release-android:
-    needs: [ test ]
+    needs: [ test-app ]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Java
