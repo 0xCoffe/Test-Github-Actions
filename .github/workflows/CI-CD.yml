@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Java
@@ -13,38 +13,43 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Clone repository
-        uses: actions/checkout@v4
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.24.1
-      - name: Get App Version
-        id: get_flutter_version
-        uses: its404/get-flutter-version@v1.0.0
-      - name: Test Flutter Version
-        run: echo 'version_number:' ${{ steps.get_flutter_version.outputs.version_number }} ' build_number:' ${{ steps.get_flutter_version.outputs.build_number }}
-      - name: Get Branch Name
-        id: branch
-        run: echo "::set output name=branch::${GITHUB_REF##*/}"
-      - name: Output Run ID
-        run: echo ${{ github.run_id }}
-      - name: Output Run Number
-        run: echo ${{ github.run_number }}
-      - name: Output Run Attempt
-        run: echo ${{ github.run_attempt }}
-      - name: Set PWD
-        run: echo "CM_KEYSTORE_PATH=$(pwd)/keystore.jks" >> $GITHUB_ENV
-      - name: Decode Keystore
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - run: flutter pub get
+      - run: flutter clean
+      - run: flutter test
+
+  release-android:
+    needs: [ test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4.2.2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.24.1
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Keystore
         env:
           CI: true
-          CM_ENCODED_CERT:  ${{ secrets.SIGN_STORE_CERT }}
+          CM_ENCODED_CERT: ${{ secrets.SIGN_STORE_CERT }}
         run: |
+          echo "CM_KEYSTORE_PATH=$(pwd)/keystore.jks" >> $GITHUB_ENV
           echo $CM_ENCODED_CERT > keystore-b64.txt
-          base64 -d keystore-b64.txt > keystore.jks      
+          base64 -d keystore-b64.txt > keystore.jks
       - run: flutter pub get
-      - run: flutter test
+      - run: flutter clean
       - name: Build APK
         env:
           CM_KEYSTORE_PASSWORD: ${{ secrets.SIGN_STORE_PASSWORD }}
@@ -59,3 +64,9 @@ jobs:
         run: flutter build appbundle
 
 
+  archive-android:
+    needs: [ release-android ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Archive
+        run: echo "ARCHIVE HERE"
