@@ -8,6 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4.2.2
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
       - name: Clone repository
         uses: actions/checkout@v4
       - name: Set up Flutter
@@ -45,12 +51,12 @@ jobs:
           CM_KEYSTORE_PASSWORD: ${{ secrets.SIGN_STORE_PASSWORD }}
           CM_KEY_ALIAS: ${{ secrets.SIGN_KEY }}
           CM_KEY_PASSWORD: ${{ secrets.SIGN_PASSWORD }}
-        run: flutter build apk --build-name "MyCustomAppName"
+        run: flutter build apk
       - name: Build APP BUNDLE
         env:
           CM_KEYSTORE_PASSWORD: ${{ secrets.SIGN_STORE_PASSWORD }}
           CM_KEY_ALIAS: ${{ secrets.SIGN_KEY }}
           CM_KEY_PASSWORD: ${{ secrets.SIGN_PASSWORD }}
-        run: flutter build appbundle --build-name "MyCustomAppName"
+        run: flutter build appbundle
 
 
