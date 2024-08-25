@@ -80,21 +80,6 @@ jobs:
           mv $(pwd)build/app/outputs/bundle/release/app-release.aab $(pwd)build/app/outputs/bundle/release/${{env.APP_NAME}}.aab
           ls $(pwd)/build/app/outputs/flutter-apk
           ls $(pwd)build/app/outputs/bundle/release/
-          zip -r ${{APP_NAME}}.zip $(pwd)/build/app/outputs/flutter-apk/${{env.APP_NAME}}.apk $(pwd)build/app/outputs/bundle/release/${{env.APP_NAME}}.aab
+          zip -r ${{env.APP_NAME}}.zip $(pwd)/build/app/outputs/flutter-apk/${{env.APP_NAME}}.apk $(pwd)build/app/outputs/bundle/release/${{env.APP_NAME}}.aab
           ls $(pwd)
           echo "ARCHIVE HERE"
-#
-#          - name: Get App Version
-#            id: get_flutter_version
-#            uses: its404/get-flutter-version@v1.0.0
-#          - name: Test Flutter Version
-#            run: echo 'version_number:' ${{ steps.get_flutter_version.outputs.version_number }} ' build_number:' ${{ steps.get_flutter_version.outputs.build_number }}
-#          - name: Get Branch Name
-#            id: branch
-#            run: echo "::set output name=branch::${GITHUB_REF##*/}"
-#          - name: Output Run ID
-#            run: echo ${{ github.run_id }}
-#          - name: Output Run Number
-#            run: echo ${{ github.run_number }}
-#          - name: Output Run Attempt
-#            run: echo ${{ github.run_attempt }}
