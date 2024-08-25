@@ -15,15 +15,15 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.24.1
-      - name: Get Flutter Version
+      - name: Get App Version
         id: get_flutter_version
         uses: its404/get-flutter-version@v1.0.0
       - name: Test Flutter Version
         run: echo 'version_number:' ${{ steps.get_flutter_version.outputs.version_number }} ' build_number:' ${{ steps.get_flutter_version.outputs.build_number }}
       - name: Get Branch Name
         id: branch
-        run: echo "::set output name=branch::${GITHUB_REF*/}"
-      - name: Get Branch Name
+        run: echo "::set output name=branch::${GITHUB_REF##*/}"
+      - name: Get Branch Date
         id: date
         run: echo "::set output name=date::$(date + '%Y-%m-%d')"
 
