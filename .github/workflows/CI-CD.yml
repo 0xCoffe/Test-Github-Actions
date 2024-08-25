@@ -8,6 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Purge cache
+        uses: MyAlbum/purge-cache@v2
       - name: Clone repository
         uses: actions/checkout@v4
       - name: Set up Flutter
