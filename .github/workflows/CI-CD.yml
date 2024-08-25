@@ -67,6 +67,8 @@ jobs:
     needs: [ release-android ]
     runs-on: ubuntu-latest
     steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
       - name: Get App Version
         id: get_flutter_version
         uses: its404/get-flutter-version@v1.0.0
