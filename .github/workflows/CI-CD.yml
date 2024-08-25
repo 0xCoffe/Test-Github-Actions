@@ -79,9 +79,11 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
+
       - name: Get App Version
-        id: get_flutter_version
-        uses: its404/get-flutter-version@v1.0.0
+        id: project_version
+        uses: RCSandberg/dart-flutter-read-package-version-action@v2.0.1
+
       - name: Download APK
         uses: actions/download-artifact@v4
         with:
@@ -91,7 +93,7 @@ jobs:
         with:
           name: app-release.aab
       - name: Prepare ARCHIVE NAME
-        run: echo "APP_NAME=${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}+${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}" >> $GITHUB_ENV
+        run: echo "APP_NAME=${{ github.event.repository.name }}-release-v${{ steps.project_version.outputs.semantic-version }}-buildNum_${{ github.run_number }}" >> $GITHUB_ENV
       - name: Archive
         run: |
           sudo apt-get update
