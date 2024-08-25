@@ -8,8 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Purge cache
-        uses: MyAlbum/purge-cache@v2
       - name: Clone repository
         uses: actions/checkout@v4
       - name: Set up Flutter
@@ -37,21 +35,22 @@ jobs:
         env:
           CI: true
           CM_ENCODED_CERT:  ${{ secrets.SIGN_STORE_CERT }}
-          CM_KEYSTORE_PASSWORD: ${{ secrets.SIGN_STORE_PASSWORD }}
-          CM_KEY_ALIAS: ${{ secrets.SIGN_KEY }}
-          CM_KEY_PASSWORD: ${{ secrets.SIGN_PASSWORD }}
         run: |
           echo $CM_ENCODED_CERT > keystore-b64.txt
           base64 -d keystore-b64.txt > keystore.jks      
-          echo ${{env.CI}}
-          echo ${{env.CM_ENCODED_CERT}}
-          echo ${{env.CM_KEYSTORE_PASSWORD}}
-          echo ${{env.CM_KEY_ALIAS}}
-          echo ${{env.CM_KEYSTORE_PASSWORD}}
-          echo ${{env.CM_KEY_PASSWORD}}
       - run: flutter pub get
       - run: flutter test
-      - run: flutter build apk --build-name "MyCustomAppName"
-      - run: flutter build appbundle --build-name "MyCustomAppName"
+      - name: Build APK
+        env:
+          CM_KEYSTORE_PASSWORD: ${{ secrets.SIGN_STORE_PASSWORD }}
+          CM_KEY_ALIAS: ${{ secrets.SIGN_KEY }}
+          CM_KEY_PASSWORD: ${{ secrets.SIGN_PASSWORD }}
+        run: flutter build apk --build-name "MyCustomAppName"
+      - name: Build APP BUNDLE
+        env:
+          CM_KEYSTORE_PASSWORD: ${{ secrets.SIGN_STORE_PASSWORD }}
+          CM_KEY_ALIAS: ${{ secrets.SIGN_KEY }}
+          CM_KEY_PASSWORD: ${{ secrets.SIGN_PASSWORD }}
+        run: flutter build appbundle --build-name "MyCustomAppName"
 
 
