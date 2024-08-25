@@ -18,6 +18,7 @@ jobs:
       - name: Get Flutter Version
         id: get_flutter_version
         uses: its404/get-flutter-version@v1.0.0
+      - name: Test Flutter Version
         run: echo 'version_number:' ${{ steps.get_flutter_version.outputs.version_number }} ' build_number:' ${{ steps.get_flutter_version.outputs.build_number }}
       - name: Get Branch Name
         id: branch
