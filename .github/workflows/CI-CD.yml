@@ -101,4 +101,12 @@ jobs:
           ls
           zip -r ${{env.APP_NAME}}.zip ${{env.APP_NAME}}.apk ${{env.APP_NAME}}.aab
       - name: Upload
-        run: echo "UPLOAD"
+        uses: adityak74/google-drive-upload-git-action@main
+        env:
+          APP_NAME: ${{ github.event.repository.name }}-release-v${{ steps.get_flutter_version.outputs.version_number }}.${{ steps.get_flutter_version.outputs.build_number }}-buildNum_${{ github.run_number }}
+        with:
+            credentials: ${{ secrets.G_DRIVE }}
+            filename: ${{env.APP_NAME}}.zip
+            folderId: ${{ secrets.G_DRIVE_RELEASE_FOLDER }}
+            overwrite: "true"
+            mirrorDirectoryStructure: "true"
