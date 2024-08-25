@@ -23,7 +23,15 @@ jobs:
       - name: Get Branch Name
         id: branch
         run: echo "::set output name=branch::${GITHUB_REF##*/}"
-      - name: Get Branch Date
-        id: date
-        run: echo "::set output name=date::$(date + '%Y-%m-%d')"
+      - name: Output Run ID
+        run: echo ${{ github.run_id }}
+      - name: Output Run Number
+        run: echo ${{ github.run_number }}
+      - name: Output Run Attempt
+        run: echo ${{ github.run_attempt }}
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build apk --build-name "MyCustomAppName"
+      - run: flutter build appbundle --build-name "MyCustomAppName"
+
 
