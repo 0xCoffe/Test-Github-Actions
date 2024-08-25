@@ -33,11 +33,12 @@ jobs:
         env:
           CI: true
           CM_KEYSTORE_PATH: "../keystore.jks"
+          CM_ENCODED_CERT:  ${{ secrets.SIGN_STORE_CERT }}
           CM_KEYSTORE_PASSWORD: ${{ secrets.SIGN_STORE_PASSWORD }}
           CM_KEY_ALIAS: ${{ secrets.SIGN_KEY }}
           CM_KEY_PASSWORD: ${{ secrets.SIGN_PASSWORD }}
         run: |
-          echo $ENCODED_STRING > keystore-b64.txt
+          echo $CM_ENCODED_CERT > keystore-b64.txt
           base64 -d keystore-b64.txt > keystore.jks
           pwd
       - run: flutter pub get
