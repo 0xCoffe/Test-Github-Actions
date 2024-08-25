@@ -63,12 +63,12 @@ jobs:
           CM_KEY_PASSWORD: ${{ secrets.SIGN_PASSWORD }}
         run: flutter build appbundle
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
           path: build/app/outputs/flutter-apk/app-release.apk
       - name: Upload APP BUNDLE
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: app-release.aab
           path: build/app/outputs/bundle/release/app-release.aab
@@ -83,11 +83,11 @@ jobs:
         id: get_flutter_version
         uses: its404/get-flutter-version@v1.0.0
       - name: Download APK
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: app-release.apk
       - name: Download APP BUNDLE
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: app-release.aab
       - name: Prepare ARCHIVE NAME
