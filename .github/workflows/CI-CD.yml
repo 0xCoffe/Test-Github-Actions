@@ -1,9 +1,6 @@
 name: Flutter Build Release
 
-on:
-  push:
-    tags:
-      - v*
+on: workflow_dispatch
 
 jobs:
   test-app:
