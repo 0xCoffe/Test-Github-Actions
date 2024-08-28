@@ -2,7 +2,8 @@ name: Flutter Build Release
 
 on:
   push:
-    branches: [main]
+    tags:
+      - v*
 
 jobs:
   test-app:
