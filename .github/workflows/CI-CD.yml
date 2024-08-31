@@ -117,7 +117,7 @@ jobs:
           -d assertion_type=urn:ietf:params:oauth:token-type:jwt \
           -d msal=https://accounts.google.com \
           -H "Content-Type: application/x-www-form-urlencoded" \
-          -d assertion=$(base64 -d <<< "${{secrets.G_DRIVE}}" | jq -r '.private_key'))
+          -d assertion="$(base64 -d <<< "${{secrets.G_DRIVE}}" | jq -r '.private_key')")
        
           echo $access_token
 #
