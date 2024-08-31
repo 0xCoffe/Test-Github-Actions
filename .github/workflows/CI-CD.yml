@@ -110,7 +110,7 @@ jobs:
 
       - name: Upload2
         run: |
-          echo $(base64 -d <<< ${{secrets.G_DRIVE}} )
+          echo $(base64 -d <<< ${{secrets.G_DRIVE}} | jq -r '.private_key') )
           
           access_token=$(curl -v -s -X POST https://oauth2.googleapis.com/token \
           -d grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer \
