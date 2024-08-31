@@ -110,14 +110,14 @@ jobs:
 
       - name: Upload2
         run: |
-          access_token=$(curl -s -X POST https://oauth2.googleapis.com/token \
+          access_token=$(curl -v -s -X POST https://oauth2.googleapis.com/token \
           -d grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer \
           -d assertion_type=urn:ietf:params:oauth:token-type:jwt \
           -d msal=https://accounts.google.com \
           -H "Content-Type: application/x-www-form-urlencoded" \
           -d assertion=$(base64 -d <<< ${{secrets.G_DRIVE}} | jq -r '.private_key'))
           
-          curl -X POST https://www.googleapis.com/upload/drive/v3/files?uploadType=media \
+          curl -v -X POST https://www.googleapis.com/upload/drive/v3/files?uploadType=media \
           -H "Authorization: Bearer $access_token" \
           -H "Content-Type: application/octet-stream" \
           -F metadata='{"name":"${{env.APP_NAME}}.zip", "parents":[${{ secrets.G_DRIVE }}]}' \
